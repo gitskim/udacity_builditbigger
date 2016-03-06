@@ -35,4 +35,5 @@ dependencies {
     // Added for AdMob
     compile 'com.google.android.gms:play-services:7.3.0'
     compile project(':javaJokes')
+    compile project(":joketellinglibrary")
 }
