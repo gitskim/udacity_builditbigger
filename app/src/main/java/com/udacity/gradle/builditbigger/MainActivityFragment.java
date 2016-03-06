@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.bgirlogic.joketellinglibrary.JokeTellingAsyncTask;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -44,7 +45,8 @@ public class MainActivityFragment extends Fragment {
         mJokeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                JokeTellingAsyncTask jokeTellingAsyncTask = new JokeTellingAsyncTask(getActivity());
+                jokeTellingAsyncTask.execute();
             }
         });
     }
