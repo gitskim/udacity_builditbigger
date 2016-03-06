@@ -12,9 +12,19 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        //although debug isn't listed here, debug still exists.
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        free {
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            applicationId "com.udacity.gradle.builditbigger.paid"
         }
     }
 }
@@ -24,4 +34,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     // Added for AdMob
     compile 'com.google.android.gms:play-services:7.3.0'
+    compile project(':javaJokes')
 }
