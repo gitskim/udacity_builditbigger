@@ -34,8 +34,12 @@ public class MainActivityFragment extends Fragment {
         mJokeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JokeTellingAsyncTask jokeTellingAsyncTask = new JokeTellingAsyncTask(getActivity());
-                jokeTellingAsyncTask.execute();
+                new JokeTellingAsyncTask(getActivity(), new JokeTellingAsyncTask.OnJokeRetrievedListener() {
+                    @Override
+                    public void onRetrieved(String joke) {
+                        //do nothing
+                    }
+                }).execute();
             }
         });
     }

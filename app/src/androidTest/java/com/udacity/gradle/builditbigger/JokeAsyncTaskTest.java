@@ -4,9 +4,7 @@ import android.app.Application;
 import android.test.ApplicationTestCase;
 
 import com.bgirlogic.joketellinglibrary.JokeTellingAsyncTask;
-import com.bgirlogic.joketellinglibrary.OnJokeRetrievedListener;
 
-import java.lang.Exception;
 import java.lang.Override;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -14,28 +12,30 @@ import java.util.concurrent.TimeUnit;
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
  */
-public class JokeAsyncTaskTest extends ApplicationTestCase<Application> implements OnJokeRetrievedListener {
-    CountDownLatch signal;
-    String joke;
+public class JokeAsyncTaskTest extends ApplicationTestCase<Application> {
+    CountDownLatch signal = new CountDownLatch(1);
 
     public JokeAsyncTaskTest() {
         super(Application.class);
     }
 
     public void testJoke() {
+        new JokeTellingAsyncTask(getContext(), new TestJokeListener()).execute();
         try {
-            signal = new CountDownLatch(1);
-            new JokeTellingAsyncTask(getContext()).execute(this);
-            signal.wait(20000);
-            assertNotNull("joke is null", joke);
-        } catch (Exception ex) {
+            boolean success = signal.await(30, TimeUnit.SECONDS);
+            if (!success) {
+                fail("Test timed out");
+            }
+        } catch (InterruptedException ex) {
             fail();
         }
     }
 
-    @Override
-    public void onJokeRetrieved(String joke) {
-        this.joke = joke;
-        signal.countDown();
+    private class TestJokeListener implements JokeTellingAsyncTask.OnJokeRetrievedListener {
+        @Override
+        public void onRetrieved(String joke) {
+            assertTrue(joke != null && joke.length() > 0);
+            signal.countDown();
+        }
     }
 }
