@@ -14,16 +14,17 @@ import java.io.IOException;
 /**
  * Created by kimsuh on 3/6/16.
  */
-public class JokeTellingAsyncTask extends AsyncTask<Void, Void, String> {
+public class JokeTellingAsyncTask extends AsyncTask<OnJokeRetrievedListener, Void, String> {
     private static MyApi sMyApi = null;
     private Context mContext;
+    private OnJokeRetrievedListener onJokeRetrievedListener;
 
     public JokeTellingAsyncTask(Context context) {
         mContext = context;
     }
 
     @Override
-    protected String doInBackground(Void... params) {
+    protected String doInBackground(OnJokeRetrievedListener... params) {
         if (sMyApi == null) {
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -38,6 +39,8 @@ public class JokeTellingAsyncTask extends AsyncTask<Void, Void, String> {
             sMyApi = builder.build();
         }
 
+        onJokeRetrievedListener = params[0];
+
         try {
             return sMyApi.sayHi("").execute().getData();
         } catch (IOException e) {
@@ -48,6 +51,7 @@ public class JokeTellingAsyncTask extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+        onJokeRetrievedListener.onJokeRetrieved(s);
         mContext.startActivity(JokeTellingMainActivity.newIntent(mContext, s));
     }
 }
