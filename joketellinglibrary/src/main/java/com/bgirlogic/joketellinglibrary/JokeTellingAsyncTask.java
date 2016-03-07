@@ -29,7 +29,7 @@ public class JokeTellingAsyncTask extends AsyncTask<OnJokeRetrievedListener, Voi
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
                     //option for running agasint local server
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                    .setRootUrl("http://10.0.3.2:8080/_ah/api/")
                     .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                         @Override
                         public void initialize(AbstractGoogleClientRequest<?> request) throws IOException {
@@ -39,10 +39,10 @@ public class JokeTellingAsyncTask extends AsyncTask<OnJokeRetrievedListener, Voi
             sMyApi = builder.build();
         }
 
-        onJokeRetrievedListener = params[0];
+//        onJokeRetrievedListener = params[0];
 
         try {
-            return sMyApi.sayHi("").execute().getData();
+            return sMyApi.sayHi("hi").execute().getData();
         } catch (IOException e) {
             return e.getMessage();
         }
@@ -51,7 +51,7 @@ public class JokeTellingAsyncTask extends AsyncTask<OnJokeRetrievedListener, Voi
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        onJokeRetrievedListener.onJokeRetrieved(s);
+//        onJokeRetrievedListener.onJokeRetrieved(s);
         mContext.startActivity(JokeTellingMainActivity.newIntent(mContext, s));
     }
 }
